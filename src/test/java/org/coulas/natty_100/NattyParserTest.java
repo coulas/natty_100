@@ -3,11 +3,11 @@ package org.coulas.natty_100;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
-import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +19,7 @@ import com.joestelmach.natty.Parser;
 public class NattyParserTest {
 	Parser p = new Parser();
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	
 	@Test
 	@Parameters({
 		"first monday in 1 month, 2015-02-02", 
@@ -44,5 +45,22 @@ public class NattyParserTest {
 		System.out.println(given + " expects "+expected+" and gives " + format.format(actual));
 		System.err.println(dateGrp.getSyntaxTree().toStringTree());
 		Assert.assertEquals(given, expected, format.format(actual));
+	}
+	
+	@Test
+	public void shallBeIndependantFromLocalesOrNot() {
+		System.out.println("System Properties :");
+		for (Entry<Object, Object> entrySet : System.getProperties().entrySet()) {
+			if (entrySet.getKey().toString().matches(".*(MAVEN|JAVA|SUN|maven|java|sun).*")) {
+				System.out.println("\t" + entrySet.getKey() + "=" + entrySet.getValue());
+			}
+		}
+		System.out.println("System Environment :");
+		for (Entry<String, String> entrySet : System.getenv().entrySet()) {
+			if (entrySet.getKey().toString().matches(".*(MAVEN|JAVA|SUN|maven|java|sun).*")) {
+				System.out.println("\t" + entrySet.getKey() + "=" + entrySet.getValue());
+			}
+		}
+		Assert.assertEquals("true", true, true);
 	}
 }
